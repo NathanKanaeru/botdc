@@ -1,6 +1,6 @@
 // index.js
 require('dotenv').config();
-const { Client, GatewayIntentBits } = require('discord.js');
+const { Client, GatewayIntentBits, EmbedBuilder } = require('discord.js');
 
 // Membuat instance dari client Discord
 const client = new Client({
@@ -26,6 +26,26 @@ client.on('messageCreate', (message) => {
     if (message.content === '!ping') {
         message.channel.send('Pong!');
     }
+
+    // Perintah untuk menguji sambutan
+    if (message.content === '!testwelcome') {
+        const channel = message.channel; // Mengambil channel tempat perintah dipanggil
+        const member = message.member; // Mengambil member yang mengirim perintah
+
+        // Membuat embed untuk sambutan
+        const welcomeEmbed = new EmbedBuilder()
+            .setColor('#0099ff')
+            .setTitle('Selamat datang!')
+            .setDescription(`Selamat datang ${member}, di server kami! 🎉`)
+            .setThumbnail(member.user.displayAvatarURL()) // Menampilkan avatar user
+            .addFields(
+                { name: 'Nama Pengguna', value: member.user.tag, inline: true },
+                { name: 'ID Pengguna', value: member.id, inline: true }
+            )
+            .setTimestamp();
+
+        channel.send({ embeds: [welcomeEmbed] }); // Mengirim embed ke channel
+    }
 });
 
 // Event ketika anggota baru bergabung
@@ -34,7 +54,19 @@ client.on('guildMemberAdd', (member) => {
     const channel = member.guild.channels.cache.find(channel => channel.name === 'nama-channel-sambutan');
     
     if (channel) {
-        channel.send(`Selamat datang ${member}, di server kami! 🎉`);
+        // Membuat embed untuk sambutan
+        const welcomeEmbed = new EmbedBuilder()
+            .setColor('#0099ff')
+            .setTitle('Selamat datang!')
+            .setDescription(`Selamat datang ${member}, di server kami! 🎉`)
+            .setThumbnail(member.user.displayAvatarURL()) // Menampilkan avatar user
+            .addFields(
+                { name: 'Nama Pengguna', value: member.user.tag, inline: true },
+                { name: 'ID Pengguna', value: member.id, inline: true }
+            )
+            .setTimestamp();
+
+        channel.send({ embeds: [welcomeEmbed] }); // Mengirim embed ke channel
     }
 });
 
